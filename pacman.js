@@ -75,6 +75,7 @@ window.onload = function(){
     console.log(ghosts.size);
 
     update();
+    document.addEventListener("keyup", movePacman);
 }
 
 class Block {
@@ -145,6 +146,7 @@ function loadMap() {
 
 
 function update(){
+    move();
     draw();
     setTimeout(update, 50);
 }
@@ -156,5 +158,66 @@ function draw(){
     }
     for(let wall of walls.values()){
         context.drawImage(wall.image,wall.x, wall.y, wall.width,wall.height)
+    }
+}
+
+function move() {
+    pacman.x= pacman.velocityX;
+    pacman.Y= pacman.velocityY;
+}
+
+function movePacman(e) {
+    if (e.code == "ArowUp" || e.code == "KeyW"){
+        pacman.updateDirection('U');
+    }
+    else if (e.code == "ArowDown" || e.code == "KeyS"){
+        pacman.updateDirection('D');
+    }
+    else if (e.code == "ArowLeft" || e.code == "KeyA"){
+        pacman.updateDirection('L');
+    }
+    else if (e.code == "ArowRight" || e.code == "KeyD"){
+        pacman.updateDirection('R');
+    }
+}
+
+class Block{
+    constructor(image, x,y, width, height){
+        this.image = image;
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+
+        this.startx = x;
+        this.starty = y;
+
+        this.direction = 'R';
+        this.velocityX = 0;
+        this.velocityY = 0;
+    }
+
+    updateDirection(direction){
+        this.direction = direction;
+        this.updateVelocity();
+    }
+
+    updateDirection() {
+        if(this.directon=='u') {
+            this.velocityX = 0;
+            this.velocityY = -tileSize/4;
+        }
+        else if(this.directon=='D') {
+            this.velocityX = 0;
+            this.velocityY = tileSize/4;
+        }
+        else if(this.directon=='L') {
+            this.velocityX = -tileSize/4;
+            this.velocityY = 0;
+        }
+        else if(this.directon=='R') {
+            this.velocityX = tileSize/4;
+            this.velocityY = 0;
+        }
     }
 }
